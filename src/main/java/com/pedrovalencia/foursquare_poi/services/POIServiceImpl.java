@@ -8,6 +8,7 @@ import fi.foyt.foursquare.api.Result;
 import fi.foyt.foursquare.api.entities.CompactVenue;
 import fi.foyt.foursquare.api.entities.VenuesSearchResult;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * Created by valenciap
  * on 01/02/2016.
  */
+@Service
 public class POIServiceImpl implements POIService{
 
     /* Parameters to connect  with Foursquare API */
