@@ -1,6 +1,7 @@
 package com.pedrovalencia.foursquare_poi.services;
 
 import com.pedrovalencia.foursquare_poi.beans.POIBean;
+import com.pedrovalencia.foursquare_poi.exceptions.POIServiceException;
 import fi.foyt.foursquare.api.FoursquareApi;
 import fi.foyt.foursquare.api.FoursquareApiException;
 import fi.foyt.foursquare.api.Result;
@@ -33,7 +34,9 @@ public class POIServiceImpl implements POIService{
 
         Result<VenuesSearchResult> result = getVenuesSearchFromAPI(place);
 
-        //TODO to catch custom exception when code != 200
+        if(result.getMeta().getCode() != 200) {
+            throw new POIServiceException("Error code: "+ result.getMeta().getCode().toString());
+        }
 
         convertToPOIBean(pois, result);
 
@@ -69,13 +72,13 @@ public class POIServiceImpl implements POIService{
         FoursquareApi foursquareApi = new FoursquareApi(clientId, clientSecret, clientCallbackUrl);
 
         // After client has been initialized we can make queries.
-        Result<VenuesSearchResult> result = null;
+        Result<VenuesSearchResult> result;
         try {
             result =
                     foursquareApi.venuesSearch(null, null, null, null, null, null,
                             null, null, null, null, null, null, place);
         } catch (FoursquareApiException e) {
-            //TODO to catch custom exception
+            throw new POIServiceException("Error calling foursquare api: ", e.getCause());
         }
         return result;
     }
